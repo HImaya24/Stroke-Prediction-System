@@ -7,7 +7,7 @@ import numpy as np
 from typing import Dict, Any
 import os
 
-PORT = int(os.getenv("PORT", 8000))#8000 for vercel
+PORT = int(os.getenv("PORT", 8000))
 
 app = FastAPI(title="Stroke Prediction API", version="1.0.0")
 
@@ -122,6 +122,6 @@ async def predict_stroke(patient_data: PatientData):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Prediction error: {str(e)}")
 
-#if __name__ == "__main__":
-    # import uvicorn
-    #uvicorn.run(app, host="0.0.0.0", port=PORT)
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
