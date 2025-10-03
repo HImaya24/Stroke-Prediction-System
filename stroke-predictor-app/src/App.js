@@ -76,7 +76,7 @@ function App() {
     <div className="App">
       <div className="container">
         <header className="header">
-          <h1>🫀 Stroke Risk Prediction</h1>
+          <h1> Stroke Risk Prediction</h1>
           <p>Assess your stroke risk using advanced machine learning</p>
         </header>
 
