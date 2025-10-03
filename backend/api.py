@@ -5,6 +5,9 @@ import joblib
 import pandas as pd
 import numpy as np
 from typing import Dict, Any
+import os
+
+PORT = int(os.getenv("PORT", 5000))
 
 app = FastAPI(title="Stroke Prediction API", version="1.0.0")
 
@@ -55,7 +58,7 @@ async def predict_stroke(patient_data: PatientData):
     
     try:
         # Convert to dict and then to DataFrame
-        data = patient_data.dict()
+        data = patient_data.model_dump()
         input_df = pd.DataFrame([data])
         
         # Create derived features (same as training)
@@ -121,4 +124,4 @@ async def predict_stroke(patient_data: PatientData):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
