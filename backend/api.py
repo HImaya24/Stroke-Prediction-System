@@ -7,7 +7,7 @@ import numpy as np
 from typing import Dict, Any
 import os
 
-PORT = int(os.getenv("PORT", 8000))
+PORT = int(os.getenv("PORT", 5000))
 
 app = FastAPI(title="Stroke Prediction API", version="1.0.0")
 
