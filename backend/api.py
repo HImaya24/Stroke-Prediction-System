@@ -1,3 +1,9 @@
+# NUMPY COMPATIBILITY FIX
+import numpy as np
+import sys
+if not hasattr(np, '_core'):
+    np._core = sys.modules['numpy.core']
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
