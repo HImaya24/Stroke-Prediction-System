@@ -1,17 +1,34 @@
-# NUMPY COMPATIBILITY FIX
-import numpy as np
+# ===== NUMPY FIX MUST BE AT THE VERY TOP =====
 import sys
-if not hasattr(np, '_core'):
-    np._core = sys.modules['numpy.core']
+import os
 
+# Apply numpy patch BEFORE any other imports
+def apply_numpy_patch():
+    try:
+        import numpy as np
+        if not hasattr(np, '_core'):
+            # Multiple patch attempts
+            if 'numpy.core' in sys.modules:
+                np._core = sys.modules['numpy.core']
+            else:
+                import numpy.core
+                np._core = numpy.core
+        return True
+    except Exception as e:
+        print(f"⚠️ Numpy patch attempt failed: {e}")
+        return False
+
+# Apply patch immediately
+apply_numpy_patch()
+
+# Now import other packages
+import numpy as np
+import joblib
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import joblib
 import pandas as pd
-import numpy as np
 from typing import Dict, Any
-import os
 
 PORT = int(os.getenv("PORT", 5000))
 
@@ -41,6 +58,11 @@ class PatientData(BaseModel):
 
 # Load model and preprocessing
 try:
+    # Double-check numpy patch
+    if not hasattr(np, '_core'):
+        print("🔧 Applying emergency numpy patch...")
+        np._core = np.core
+    
     model = joblib.load('stroke_model_advanced_20251002_161742.pkl')
     preprocessing = joblib.load('preprocessing_advanced_20251002_161742.pkl')
     print("✅ Model and preprocessing loaded successfully!")
