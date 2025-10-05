@@ -17,6 +17,9 @@ import { Calculate } from '@mui/icons-material';
 import axios from 'axios';
 import PredictionCharts from './PredictionCharts';
 
+// HF backend URL
+const API_BASE = "https://stroke-prediction-backend.hf.space";
+
 // ADD showAdminView prop here with default value false
 const PredictionForm = ({ onPrediction, showAdminView = false }) => {
   const [formData, setFormData] = useState({
@@ -47,9 +50,9 @@ const PredictionForm = ({ onPrediction, showAdminView = false }) => {
     event.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
-      const response = await axios.post('http://localhost:5000/predict', formData);
+      const response = await axios.post(`${API_BASE}/predict`, formData);
       
       if (response.data.success) {
         const predictionResult = {
@@ -64,7 +67,7 @@ const PredictionForm = ({ onPrediction, showAdminView = false }) => {
         setError('Prediction failed: ' + response.data.error);
       }
     } catch (err) {
-      setError('Failed to connect to server. Make sure the Python API is running on port 5000.');
+      setError('Failed to connect to server. Make sure the backend is running.');
     } finally {
       setLoading(false);
     }
@@ -203,13 +206,8 @@ const PredictionForm = ({ onPrediction, showAdminView = false }) => {
                 sx={{
                   backgroundColor: '#8B0000',
                   color: 'white',
-                  '&:hover': {
-                    backgroundColor: '#A52A2A',
-                  },
-                  '&:disabled': {
-                    backgroundColor: '#f0f0f0',
-                    color: '#a0a0a0',
-                  }
+                  '&:hover': { backgroundColor: '#A52A2A' },
+                  '&:disabled': { backgroundColor: '#f0f0f0', color: '#a0a0a0' }
                 }}
               >
                 {loading ? 'Analyzing...' : 'Predict Stroke Risk'}
@@ -225,12 +223,11 @@ const PredictionForm = ({ onPrediction, showAdminView = false }) => {
         )}
       </Paper>
 
-      {/* FIXED: Pass showRecommendations prop to PredictionCharts */}
       {prediction && (
         <PredictionCharts 
           prediction={prediction} 
           formData={formData}
-          showRecommendations={!showAdminView} // This will be false in admin dashboard
+          showRecommendations={!showAdminView}
         />
       )}
     </Box>
