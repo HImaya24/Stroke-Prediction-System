@@ -17,6 +17,9 @@ import { Calculate } from '@mui/icons-material';
 import axios from 'axios';
 import PredictionCharts from './PredictionCharts';
 
+/*// HF backend URL - if hf backend deployment successful 
+const API_BASE = "https://stroke-prediction-backend.hf.space";*/ 
+
 // ADD showAdminView prop here with default value false
 const PredictionForm = ({ onPrediction, showAdminView = false }) => {
   const [formData, setFormData] = useState({
@@ -49,7 +52,7 @@ const PredictionForm = ({ onPrediction, showAdminView = false }) => {
     setError('');
     
     try {
-      const response = await axios.post('http://localhost:5000/predict', formData);
+      const response = await axios.post('http://localhost:5000/predict', formData);// if backend deployment successful for '/predict' endpoint, use ${API_BASE} instead.
       
       if (response.data.success) {
         const predictionResult = {
